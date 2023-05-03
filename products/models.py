@@ -20,3 +20,6 @@ class Product(models.Model):
     )
     stock = models.IntegerField()
     avaliable = models.BooleanField(default=True)
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="products"
+    )
