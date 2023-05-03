@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 from .permissions import IsVendorOrReadOnly
@@ -15,8 +15,8 @@ class ProductView(CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class DetailProductView(RetrieveUpdateAPIView):
+class DetailProductView(RetrieveAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsVendorOrReadOnly]
-    serializer_class = ProductSerializer
     queryset = Product.objects.all()
+    serializer_class = ProductSerializer
