@@ -2,10 +2,13 @@ from django.db import models
 
 
 class ProductCategories(models.TextChoices):
-    P = "P"
-    M = "M"
-    G = "G"
-    D = "D"
+    Teclado = "Teclado"
+    Mouse = "Mouse"
+    Notebook = "Notebook"
+    HD = "HD"
+    Processador = "Processador"
+    PlacaMãe = "PlacaMãe"
+    Gabinete = "Gabinete"
     NN = "NN"
 
 
