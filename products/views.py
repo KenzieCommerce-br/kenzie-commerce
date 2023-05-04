@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from users.permissions import IsVendorOrReadOnly
 from .models import Product
@@ -27,7 +27,7 @@ class ProductView(ListCreateAPIView):
         return queryset
 
 
-class DetailProductView(RetrieveAPIView):
+class DetailProductView(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsVendorOrReadOnly]
     queryset = Product.objects.all()
