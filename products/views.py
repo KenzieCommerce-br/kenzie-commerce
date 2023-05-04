@@ -1,7 +1,7 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
-from .permissions import IsVendorOrReadOnly
+from users.permissions import IsVendorOrReadOnly
 from .models import Product
 from .serializers import ProductSerializer
 
