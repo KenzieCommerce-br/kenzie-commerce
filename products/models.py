@@ -1,6 +1,10 @@
 from django.db import models
 
 
+def upload_image_product(instance, filename):
+    return f"{instance.id_product}-{filename}"
+
+
 class ProductCategories(models.TextChoices):
     Teclado = "Teclado"
     Mouse = "Mouse"
@@ -19,6 +23,9 @@ class Product(models.Model):
         max_length=20,
         choices=ProductCategories.choices,
         default=ProductCategories.NN,
+    )
+    image = models.ImageField(
+        width_field=230, height_field=230, upload_to=upload_image_product
     )
     stock = models.IntegerField()
     avaliable = models.BooleanField(default=True)
