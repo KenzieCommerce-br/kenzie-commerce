@@ -21,7 +21,7 @@ class Product(models.Model):
         default=ProductCategories.NN,
     )
     stock = models.IntegerField()
-    avaliable = models.BooleanField(default=True)
+    available = models.BooleanField(default=True)
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="products"
     )
