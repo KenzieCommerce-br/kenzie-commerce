@@ -8,11 +8,11 @@ class IsOwnerOnlyOrAdmin(permissions.BasePermission):
         return obj == request.user or request.user.is_superuser
 
 
-class IsVendorOrReadOnly(permissions.BasePermission):
+class IsVendorAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, req: Request, view: View) -> bool:
         if req.method in permissions.SAFE_METHODS:
             return True
-        return req.user.is_seller
+        return req.user.is_seller or req.user.is_superuser
 
 
 class ReadOnly(permissions.BasePermission):
