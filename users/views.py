@@ -16,4 +16,7 @@ class UserDetailView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOnlyOrAdmin]
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_url_kwarg = 'user_id'
+    lookup_url_kwarg = "user_id"
+
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)

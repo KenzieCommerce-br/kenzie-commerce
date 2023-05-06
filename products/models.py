@@ -2,10 +2,13 @@ from django.db import models
 
 
 class ProductCategories(models.TextChoices):
-    P = "P"
-    M = "M"
-    G = "G"
-    D = "D"
+    Teclado = "Teclado"
+    Mouse = "Mouse"
+    Notebook = "Notebook"
+    HD = "HD"
+    Processador = "Processador"
+    PlacaMãe = "PlacaMãe"
+    Gabinete = "Gabinete"
     NN = "NN"
 
 
@@ -18,7 +21,7 @@ class Product(models.Model):
         default=ProductCategories.NN,
     )
     stock = models.IntegerField()
-    avaliable = models.BooleanField(default=True)
+    available = models.BooleanField(default=True)
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="products"
     )
