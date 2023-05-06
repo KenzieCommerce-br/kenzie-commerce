@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 
+from orders.models import Order
+
 from .permissions import IsClientOwnerOrAdmin
 from products.models import Product
 from .serializers import CartSerializer
@@ -110,7 +112,46 @@ class CartView(GenericAPIView):
             )
 
 
-class CartDetailView(RetrieveUpdateDestroyAPIView):
+class FinalizeOrderView(GenericAPIView):
     authentication_classes = [JWTAuthentication]
-    queryset = Cart.objects.all()
+    permission_classes = [IsClientOwnerOrAdmin]
+
     serializer_class = CartSerializer
+
+    def get_object(self):
+        user = self.request.user
+        return Cart.objects.get_or_create(user=user)[0]
+
+    def post(self, request):
+        cart = self.get_object()
+        cart_items = CartItem.objects.filter(cart=cart)
+
+        for item in cart.items.all():
+            if item.quantity > item.product.stock:
+                return Response(
+                    {
+                        "error": f"Não há estoque suficiente para o produto {item.product.name}"
+                    }
+                )
+
+        items_by_seller = {}
+        for item in cart.items.all():
+            seller = item.product.user
+            if seller not in items_by_seller:
+                items_by_seller[seller] = []
+            items_by_seller[seller].append(item)
+
+        for seller, items in items_by_seller.items():
+            order = Order.objects.create(user=cart.user, seller=seller)
+            for item in items:
+                OrderSeller.objects.create(
+                    order=order,
+                    product=item.product,
+                    quantity=item.quantity,
+                    price=item.product.price,
+                )
+                item.product.stock -= item.quantity
+                item.product.save()
+
+        cart_items.delete()
+        return Response({"success": "Ordem finalizada."})
