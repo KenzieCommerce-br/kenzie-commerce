@@ -4,6 +4,7 @@ from rest_framework_simplejwt import authentication
 from users.models import User
 from .models import Address
 from .serializers import AddressSerializer
+from users.permissions import IsOwnerOnlyOrAdmin
 
 
 class AddressView(generics.CreateAPIView):
@@ -12,7 +13,7 @@ class AddressView(generics.CreateAPIView):
     serializer_class = AddressSerializer
 
     authentication_classes = [authentication.JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOnlyOrAdmin]
 
     def perform_create(self, serializer):
         user = get_object_or_404(User, pk=self.kwargs['pk'])
