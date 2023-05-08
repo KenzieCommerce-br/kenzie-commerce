@@ -15,3 +15,17 @@ class OrderSellerSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'updated_at': {'read_only': True},
         }
+
+
+class OrderSellerStatusSerializer(serializers.ModelSerializer):
+
+    client_id = serializers.IntegerField(source='user_id', read_only=True)
+    order_id = serializers.IntegerField(source='id', read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['order_id', 'status', 'client_id', 'updated_at']
+
+        extra_kwargs = {
+            'updated_at': {'read_only': True},
+        }
