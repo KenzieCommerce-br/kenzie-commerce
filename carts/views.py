@@ -13,7 +13,7 @@ from .permissions import IsClientOwnerOrAdmin
 from products.models import Product
 from .serializers import CartSerializer
 from .models import Cart, CartItem
-
+from order_seller.models import OrderSeller
 
 class CartView(GenericAPIView):
     authentication_classes = [JWTAuthentication]
@@ -142,13 +142,15 @@ class FinalizeOrderView(GenericAPIView):
             items_by_seller[seller].append(item)
 
         for seller, items in items_by_seller.items():
-            order = Order.objects.create(user=cart.user, seller=seller)
+            order = Order.objects.create(user=cart.user)
+
             for item in items:
                 OrderSeller.objects.create(
                     order=order,
                     product=item.product,
                     quantity=item.quantity,
                     price=item.product.price,
+                    seller=seller
                 )
                 item.product.stock -= item.quantity
                 item.product.save()
