@@ -9,6 +9,12 @@ class IsOwnerOnlyOrAdmin(permissions.BasePermission):
         return obj == request.user or request.user.is_superuser
 
 
+class IsOwnerOrAdminAddress(permissions.BasePermission):
+    def has_permission(self, request: Request, view: View) -> bool:
+        user_id = view.kwargs.get("pk", False)
+        return request.user.is_superuser or request.user.id == user_id
+
+
 class IsVendorAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, req: Request, view: View) -> bool:
         if req.method in permissions.SAFE_METHODS:
