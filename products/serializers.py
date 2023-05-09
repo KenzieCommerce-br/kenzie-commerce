@@ -11,9 +11,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         read_only_fields = ["id", "available"]
-        fields = ["id", "price", "name", "stock", "category", "available"]
+        fields = ["id", "price", "image", "name", "stock", "category", "available"]
 
-        
+
 class UpdateProductSerializer(serializers.ModelSerializer):
     available = serializers.SerializerMethodField()
 
