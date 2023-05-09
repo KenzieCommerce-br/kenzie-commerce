@@ -1,17 +1,16 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import response, status, permissions
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from django.shortcuts import get_object_or_404
-
 from .models import Rating
 from users.models import User
 from orders.models import Order
 from products.models import Product
 from order_seller.models import OrderSeller
-from .serializers import RatingSerializer
+from .serializers import RatingSerializer, AllRatingSerializer
 
 
-class RatingView(ListCreateAPIView):
+class RatingView(CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
@@ -90,7 +89,40 @@ class RatingView(ListCreateAPIView):
                                         status=status.HTTP_401_UNAUTHORIZED
                                     )
         else:
-            return response.Response(
-                {'error': 'Este usuário não está autorizado à acessar essa informação.'},
+            return response.Response({
+                'error': 'Este usuário não está autorizado à acessar essa informação.'
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class AllRatingsView(ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = AllRatingSerializer
+
+
+class RatingUserView(ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated | permissions.IsAdminUser]
+
+    queryset = Rating.objects.all()
+    serializer_class = AllRatingSerializer
+    lookup_field = 'user_id'
+
+    def list(self, request, *args, **kwargs):
+        if self.kwargs['user_id'] != request.user.id:
+            return response.Response({
+                'error': 'Este usuário não está autorizado à acessar essa informação.'
+            },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        queryset = Rating.objects.filter(user=request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return response.Response(serializer.data)
