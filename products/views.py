@@ -1,13 +1,16 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from users.permissions import IsVendorOrReadOnly
+from users.permissions import (
+    IsVendorAdminOrReadOnly,
+    IsSellerAdminOrReadOnly,
+)
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, UpdateProductSerializer
 
 
 class ProductView(ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsVendorOrReadOnly]
+    permission_classes = [IsVendorAdminOrReadOnly]
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
@@ -29,6 +32,6 @@ class ProductView(ListCreateAPIView):
 
 class DetailProductView(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsVendorOrReadOnly]
+    permission_classes = [IsSellerAdminOrReadOnly]
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = UpdateProductSerializer

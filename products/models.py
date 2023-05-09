@@ -28,7 +28,7 @@ class Product(models.Model):
         width_field=230, height_field=230, upload_to=upload_image_product
     )
     stock = models.IntegerField()
-    avaliable = models.BooleanField(default=True)
+    available = models.BooleanField(default=True)
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="products"
     )
