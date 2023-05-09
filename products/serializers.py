@@ -13,7 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "available"]
         fields = ["id", "price", "name", "stock", "category", "available"]
 
-
+        
 class UpdateProductSerializer(serializers.ModelSerializer):
     available = serializers.SerializerMethodField()
 
