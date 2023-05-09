@@ -7,5 +7,11 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['id', 'street', 'number', 'complement', 'zip_code', 'user_id']
+        read_only_fields = ['id', 'user_id']
 
-        extra_kwargs = {'id': {'read_only': True}, 'user_id': {'read_only': True}}
+
+class AddressUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'street', 'number', 'complement', 'zip_code', 'user_id', 'default']
+        read_only_fields = ['id', 'user_id']
