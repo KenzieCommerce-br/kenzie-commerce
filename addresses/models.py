@@ -6,6 +6,7 @@ class Address(models.Model):
     number = models.CharField(max_length=10)
     complement = models.CharField(max_length=100, null=True)
     zip_code = models.IntegerField()
+    default = models.BooleanField(default=True, null=True)
 
     user = models.ForeignKey(
         "users.User",

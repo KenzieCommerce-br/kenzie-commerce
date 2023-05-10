@@ -6,7 +6,7 @@ class OrderSeller(models.Model):
     quantity = models.IntegerField()
     price = models.FloatField()
 
-    product = models.OneToOneField(
+    product = models.ForeignKey(
         'products.Product', on_delete=models.CASCADE, related_name='order_seller'
     )
 
