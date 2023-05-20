@@ -12,4 +12,5 @@ assim como sua validação antes de qualquer pedido ser efetivado.
 Links úteis:
 
 Figma do front-end: https://www.figma.com/file/xNC0Pc0wA0gxnBXNLhlahd/Kenzie-Commerce?type=design&node-id=0-1&t=vtJuB58Af6Mx604z-0
+
 Vercel: https://kenzie-commerce-4rbw.onrender.com (infelizmente está fora do ar)
